@@ -36,9 +36,12 @@
                 <div class="text-muted">Вопросы: {{ quiz_range }}</div>
                 <div class="d-flex">
                     <div class="w-100 mr-2">
-                        <input v-model="input_question_range" type="text" class="form-control rounded-0" />
+                        <input v-model="input_question_range" v-on:keyup.enter="set_exam_quizes" type="text" class="form-control rounded-0" />
                     </div>
                     <button type="button" v-on:click="set_exam_quizes" class="btn btn-outline-primary rounded-0">Начать</button>
+                </div>
+                <div v-if="exam_quizes.length === 0" class="text-success font-weight-lighter">
+                    Неправильный диапазон вопросов
                 </div>
             </div>
         </div>
@@ -71,7 +74,7 @@
         props: ['quiz_bank'],
         data() {
             return {
-                input_question_range: '1-25',
+                input_question_range: '25-10',
                 exam_quizes: [],
                 showInfo: false
             }

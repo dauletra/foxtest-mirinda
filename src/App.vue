@@ -2,7 +2,9 @@
   <div class="container-fluid px-0" style="max-width: 700px">
 
     <div class="text-center border shadow-sm mb-4">
-      <div class="h2">FoxTest</div>
+      <div class="h2">
+        <span style="cursor: pointer" v-on:click="quiz_bank={}">FoxTest</span>
+      </div>
     </div>
 
     <div v-if="Object.keys(quiz_bank).length === 0" class="py-4 px-3">

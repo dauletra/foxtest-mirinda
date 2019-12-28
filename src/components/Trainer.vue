@@ -1,8 +1,8 @@
 <template>
     <div>
         <div v-if="quizes.length > 0" class="border d-flex" style="height: 60px">
-            <div class="border d-flex align-items-center px-1 shadow-sm">
-                <span style="white-space: nowrap">Осталось {{ quizes.length }}</span>
+            <div class="border shadow-sm d-flex align-items-center">
+                <div class="text-center text-secondary font-weight-bold px-2">{{ quizes.length }}</div>
             </div>
             <div class="d-flex align-items-center px-2 border-right w-100 white-space: nowrap" style="overflow-x: auto">
                 <a href="#" class="px-2" v-for="(quiz, index) in quizes" v-bind:key="index" v-on:click.prevent="next_question(quiz.id)">{{ quiz.number }}</a>
@@ -18,18 +18,20 @@
                 <label for="show_option_id" v-bind:class="['mr-1', show_option ? '' : 'text-muted']">Показать буквы</label>
                 <input type="checkbox" v-bind:disabled="checked" id="show_option_id" v-model="show_option" />
             </div>
-            <p v-html="question_answers.question"></p>
-            <div v-for="answer in question_answers.answers" v-bind:key="answer.value" class="d-flex">
+            <div v-touch:swipe.left="next_question" v-touch:swipe.right="check_answer">
+                <p v-html="question_answers.question" onselectstart="return false" onmousedown="return false"></p>
+                <div v-for="answer in question_answers.answers" v-bind:key="answer.value" class="d-flex">
                 <span v-bind:class="['text-'+answer.spoiler.color, 'font-weight-bold']">
                     {{ answer.spoiler.text }}
                 </span>
-                <p class="form-check-inline">
-                    <input v-model="answer_codes" v-bind:disabled="checked"
-                           class="form-check-input" v-bind:type="mode === 1 ? 'radio' : 'checkbox'" v-bind:value="answer.value"
-                           v-bind:id="'answer'+answer.value">
-                    <label v-bind:for="'answer'+answer.value" v-html="answer.text"
-                           class="form-check-label"></label>
-                </p>
+                    <p class="form-check-inline" v-on:dblclick="check_answer">
+                        <input v-model="answer_codes" v-bind:disabled="checked"
+                               class="form-check-input" v-bind:type="mode === 1 ? 'radio' : 'checkbox'" v-bind:value="answer.value"
+                               v-bind:id="'answer'+answer.value">
+                        <label v-bind:for="'answer'+answer.value" v-html="answer.text"
+                               class="form-check-label" onselectstart="return false" onmousedown="return false"></label>
+                    </p>
+                </div>
             </div>
         </div>
 
@@ -45,7 +47,6 @@
 </template>
 
 <script>
-
     function shuffle_array(array) {
         for (let i = array.length - 1; i > 0; i--) {
             let j = Math.floor(Math.random() * (i + 1));
@@ -174,5 +175,7 @@
 </script>
 
 <style scoped>
-
+    .touch-background {
+        background-color: cadetblue;
+    }
 </style>
