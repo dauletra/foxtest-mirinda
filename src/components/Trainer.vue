@@ -16,7 +16,7 @@
         <div class="px-1 pt-3" style="overflow-x: auto;">
             <div class="text-right">
                 <label for="show_option_id" v-bind:class="['mr-1', show_option ? '' : 'text-muted']">Показать буквы</label>
-                <input type="checkbox" v-bind:disabled="checked" id="show_option_id" v-model="show_option" />
+                <input type="checkbox" id="show_option_id" v-model="show_option" />
             </div>
             <div v-touch:swipe.left="next_question" v-touch:swipe.right="check_answer">
                 <p v-html="question_answers.question" onselectstart="return false" onmousedown="return false"></p>
@@ -24,7 +24,7 @@
                 <span v-bind:class="['text-'+answer.spoiler.color, 'font-weight-bold']">
                     {{ answer.spoiler.text }}
                 </span>
-                    <p class="form-check-inline" v-on:dblclick="check_answer">
+                    <p class="form-check-inline" v-on:dblclick="check_answer_by_mode">
                         <input v-model="answer_codes" v-bind:disabled="checked"
                                class="form-check-input" v-bind:type="mode === 1 ? 'radio' : 'checkbox'" v-bind:value="answer.value"
                                v-bind:id="'answer'+answer.value">
@@ -123,7 +123,10 @@
                 this.question_answers.question = this.quiz.question;
                 this.question_answers.answers = shuffle_array(answers);
             },
-
+            check_answer_by_mode() {
+                if (this.mode === 1)
+                    this.check_answer();
+            },
             check_answer: function() {
                 if (this.checked) return;
                 this.checked = true;

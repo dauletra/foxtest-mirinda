@@ -74,7 +74,7 @@
         props: ['quiz_bank'],
         data() {
             return {
-                input_question_range: '25-10',
+                input_question_range: '1-25',
                 exam_quizes: [],
                 showInfo: false
             }
