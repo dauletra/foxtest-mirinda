@@ -78,10 +78,17 @@
       onReaderLoad: function(event) {
         let jsontext = event.target.result;
         let json = JSON.parse(jsontext);
-        console.log('# openFile: --------- Тесты загружены -----------------')
-        console.log('# openFile: Количество вопросов: ' + json.quizes.length);
-        console.log('# openFile: _v = ' + json._v);
-        console.log('# openFile: mode = ' + json.mode);
+        console.group('openFile');
+        console.log(' - Тесты загружены -');
+        console.log('_v = ' + json._v);
+        console.log('name = ' + json.name);
+        console.log('code = ' + json.code);
+        console.log('mode = ' + json.mode);
+        console.log('created = ' + json.created);
+        console.log('comment: ' + json.comment);
+        console.log('Количество вопросов: ' + json.quizes.length);
+        console.log('[' + Object.keys(json).join(', ') + ']');
+        console.groupEnd('openFile');
         this.quiz_bank = json;
       }
     },
