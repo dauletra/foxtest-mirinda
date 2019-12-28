@@ -1,6 +1,5 @@
 <template>
     <div>
-
         <div v-if="quizes.length > 0" class="border d-flex" style="height: 60px">
             <div class="border d-flex align-items-center px-1 shadow-sm">
                 <span style="white-space: nowrap">Осталось {{ quizes.length }}</span>
@@ -14,7 +13,7 @@
             Вопросы закончились
         </div>
 
-        <div class="px-1 pt-3">
+        <div class="px-1 pt-3" style="overflow-x: auto;">
             <div class="text-right">
                 <label for="show_option_id" v-bind:class="['mr-1', show_option ? '' : 'text-muted']">Показать буквы</label>
                 <input type="checkbox" v-bind:disabled="checked" id="show_option_id" v-model="show_option" />
