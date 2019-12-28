@@ -1,11 +1,12 @@
 <template>
     <div>
-        <div v-if="range_numbers.length > 0" class="border d-flex" style="height: 60px">
+
+        <div v-if="quizes.length > 0" class="border d-flex" style="height: 60px">
             <div class="border d-flex align-items-center px-1 shadow-sm">
-                <span style="white-space: nowrap">Осталось {{ range_numbers.length }}</span>
+                <span style="white-space: nowrap">Осталось {{ quizes.length }}</span>
             </div>
             <div class="d-flex align-items-center px-2 border-right w-100 white-space: nowrap" style="overflow-x: auto">
-                <a href="#" class="px-2" v-for="(next_number, index) in range_numbers" v-bind:key="index" v-on:click.prevent="next_question(next_number)">{{ next_number }}</a>
+                <a href="#" class="px-2" v-for="(quiz, index) in quizes" v-bind:key="index" v-on:click.prevent="next_question(quiz.id)">{{ quiz.number }}</a>
             </div>
         </div>
 
@@ -18,8 +19,8 @@
                 <label for="show_option_id" v-bind:class="['mr-1', show_option ? '' : 'text-muted']">Показать буквы</label>
                 <input type="checkbox" v-bind:disabled="checked" id="show_option_id" v-model="show_option" />
             </div>
-            <p v-html="quiz.question"></p>
-            <div v-for="answer in quiz.answers" v-bind:key="answer.value" class="d-flex">
+            <p v-html="question_answers.question"></p>
+            <div v-for="answer in question_answers.answers" v-bind:key="answer.value" class="d-flex">
                 <span v-bind:class="['text-'+answer.spoiler.color, 'font-weight-bold']">
                     {{ answer.spoiler.text }}
                 </span>
@@ -38,7 +39,7 @@
                 <button type="button" v-bind:disabled="checked" v-on:click="check_answer" class="btn btn-info rounded-0">Проверить</button>
             </div>
             <div>
-                <button type="button" v-bind:disabled="range_numbers.length === 0" v-on:click="next_question" class="btn btn-warning rounded-0">&gt;</button>
+                <button type="button" v-bind:disabled="quizes.length === 0" v-on:click="next_question" class="btn btn-warning rounded-0">&gt;</button>
             </div>
         </div>
     </div>
@@ -57,41 +58,47 @@
     export default {
         name: "Trainer",
         props: {
-            quiz_bank: Object,
-            exam_range_numbers: Array
+            exam_quizes: Array,
+            mode: Number
         },
         data() {
             return {
-                range_numbers: [...this.exam_range_numbers],
-                current_question_number: '',
+                quizes: [...this.exam_quizes],
                 answer_codes: [],
                 checked: '',
+                question_answers: {},
                 quiz: {},
                 show_option: false
-            }
-        },
-        watch: {
-            exam_range_numbers: function(val) {
-                this.range_numbers = [...val];
-                this.next_question();
             }
         },
         created() {
             this.next_question();
         },
+        watch: {
+            exam_quizes: function(val) {
+                this.quizes = [...val];
+                this.next_question();
+            }
+        },
+        computed: {},
         methods: {
-            next_question: function(next_number) {
-                if (this.range_numbers.length === 0) {
+            next_question: function(id) {
+                if (this.quizes.length === 0) {
                     console.log('# Вопросы закончились');
                     return;
                 }
-                let index = Math.floor(Math.random() * this.range_numbers.length);
-                this.current_question_number = typeof next_number === "number" ? next_number : this.range_numbers[index];
 
-                let quiz = this.quiz_bank.quizes.filter(quiz => quiz.number === this.current_question_number)[0];
+                if (typeof id === "number") {
+                    this.quiz = this.quizes.filter(quiz => quiz.id === id)[0];
+                } else {
+                    let index = Math.floor(Math.random() * this.quizes.length);
+                    this.quiz = this.quizes[index];
+                }
+
                 let answers = [];
                 let spoiler = { text: '', color: '' };
-                quiz.answers.forEach((answer, index) => {
+
+                this.quiz.answers.forEach((answer, index) => {
                     answer = this.show_option ? answer : answer.slice(answer.indexOf(']')+1);
                     answers.push({
                         text: answer,
@@ -99,7 +106,7 @@
                         spoiler
                     })
                 });
-                quiz.fake_answers.forEach((fake_answer, index) => {
+                this.quiz.fake_answers.forEach((fake_answer, index) => {
                     fake_answer = this.show_option ? fake_answer : fake_answer.slice(fake_answer.indexOf(']')+1);
                     answers.push({
                         text: fake_answer,
@@ -107,21 +114,23 @@
                         spoiler
                     })
                 });
+
                 this.answer_codes = [];
                 this.checked = false;
-                this.quiz = {};
-                this.quiz.question = quiz.question;
-                this.quiz.answers = shuffle_array(answers);
+
+                this.question_answers = {};
+                this.question_answers.question = this.quiz.question;
+                this.question_answers.answers = shuffle_array(answers);
             },
 
             check_answer: function() {
                 if (this.checked) return;
                 this.checked = true;
 
-                let is_right = this.answer_codes.every(value => value >= 100) && this.answer_codes.length === this.quiz.answers.filter(ans => ans.value >= 100).length;
+                let is_right = this.answer_codes.every(value => value >= 100) && this.answer_codes.length === this.question_answers.answers.filter(ans => ans.value >= 100).length;
                 // console.log('# check-answer: ' + is_right);
 
-                this.quiz.answers.forEach(answer => {
+                this.question_answers.answers.forEach(answer => {
                     let text = '',
                         color = '';
 
@@ -136,9 +145,9 @@
                 });
 
                 if (is_right) {
-                    this.range_numbers.splice(this.range_numbers.indexOf(this.current_question_number), 1)
+                    this.quizes.splice(this.quizes.indexOf(this.quiz), 1)
                 } else {
-                    this.range_numbers.push(this.current_question_number);
+                    this.quizes.push(this.quiz);
                 }
             }
         }

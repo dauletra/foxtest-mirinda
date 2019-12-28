@@ -36,13 +36,13 @@
                     <div class="w-100 mr-2">
                         <input v-model="input_question_range" type="text" class="form-control rounded-0" />
                     </div>
-                    <button type="button" v-on:click="set_exam_range_numbers" class="btn btn-outline-primary rounded-0">Начать</button>
+                    <button type="button" v-on:click="set_exam_quizes" class="btn btn-outline-primary rounded-0">Начать</button>
                 </div>
             </div>
         </div>
 
-        <div v-if="exam_range_numbers.length > 0">
-            <Trainer v-bind:quiz_bank="quiz_bank" v-bind:exam_range_numbers="exam_range_numbers" />
+        <div v-if="exam_quizes.length > 0">
+            <Trainer v-bind:exam_quizes="exam_quizes" v-bind:mode="quiz_bank.mode" />
         </div>
     </div>
 </template>
@@ -64,12 +64,12 @@
         props: ['quiz_bank'],
         data() {
             return {
-                input_question_range: '1-25',
-                exam_range_numbers: [],
+                input_question_range: '1-5',
+                exam_quizes: []
             }
         },
         created() {
-            this.set_exam_range_numbers();
+            this.set_exam_quizes();
         },
         computed: {
             quiz_numbers: function() {
@@ -94,8 +94,12 @@
             }
         },
         methods: {
-            set_exam_range_numbers: function() {
-                this.exam_range_numbers = [...this.input_question_range_numbers];
+            set_exam_quizes: function() {
+                this.exam_quizes = this.input_question_range_numbers.reduce((acc, num) => {
+                    let quizes = this.quiz_bank.quizes.filter(quiz => quiz.number === num);
+                    return acc.concat(quizes);
+                }, []);
+                console.log(this.exam_quizes.length);
             },
         },
         components: {
