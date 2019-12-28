@@ -4,26 +4,26 @@
             <p class="text-uppercase text-center py-1">
                 {{ quiz_bank.name }}
             </p>
-            <table v-show="false" class="table table-striped bg-light">
+            <table v-show="true" class="table table-striped bg-light">
                 <tr>
                     <td>Код</td>
-                    <td>filosofia</td>
+                    <td>{{ quiz_bank.code }}</td>
                 </tr>
                 <tr>
                     <td>Количество вопросов</td>
-                    <td>301</td>
+                    <td>{{ quiz_bank.quizes.length }}</td>
                 </tr>
                 <tr>
                     <td>Не найденные вопросы</td>
-                    <td>56, 78</td>
+                    <td>{{ upsent_numbers }}</td>
                 </tr>
                 <tr>
                     <td>Дата создания</td>
-                    <td>16.12.2019</td>
+                    <td>{{ created_time }}</td>
                 </tr>
                 <tr>
                     <td>Комментарии</td>
-                    <td>Вопрос с номером 270 не имеет 5 вариантов ответа</td>
+                    <td>{{ quiz_bank.comment }}</td>
                 </tr>
 
             </table>
@@ -59,6 +59,11 @@
         return Array.from({length: (end-start+1)}, (v, k) => k + start);
     };
 
+    const date_to_str = (secs) => {
+        let date = new Date(secs * 1000);
+        return  date.getDate() + '.'+(date.getMonth()+1) + '.'+date.getFullYear(); //+" "+date.getHours()+':'+date.getMinutes();
+    };
+
     export default {
         name: "Quiz",
         props: ['quiz_bank'],
@@ -77,6 +82,13 @@
             },
             quiz_range: function() {
                 return Math.min(...this.quiz_numbers) + '-' + Math.max(...this.quiz_numbers);
+            },
+            upsent_numbers: function() {
+                let numbers = range(this.quiz_range);
+                return numbers.filter(number => !this.quiz_numbers.includes(number)).join(', ');
+            },
+            created_time: function() {
+                return date_to_str(this.quiz_bank.created);
             },
             input_question_range_numbers: function() {
                 let regpat = /\d{1,3}-\d{1,3}|\d{1,3}/g;

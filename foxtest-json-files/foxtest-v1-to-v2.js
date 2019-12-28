@@ -13,7 +13,7 @@ new_test._v = 0.2;
 new_test.name = test.name; // Sabaqtynh qazaqsha aty bolu kerek
 new_test.code = test.name;
 new_test.mode = 1;
-new_test.created = test.create_time;
+new_test.created = test.created_time;
 new_test.comment = 'Бұл тест жаңартылған';
 new_test.quizes = test.quizes.map((quiz, index) => {
     let new_quiz = {};
