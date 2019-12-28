@@ -26,7 +26,7 @@
                 </span>
                 <p class="form-check-inline">
                     <input v-model="answer_codes" v-bind:disabled="checked"
-                           class="form-check-input" type="checkbox" v-bind:value="answer.value"
+                           class="form-check-input" v-bind:type="mode === 1 ? 'radio' : 'checkbox'" v-bind:value="answer.value"
                            v-bind:id="'answer'+answer.value">
                     <label v-bind:for="'answer'+answer.value" v-html="answer.text"
                            class="form-check-label"></label>
@@ -68,7 +68,8 @@
                 checked: '',
                 question_answers: {},
                 quiz: {},
-                show_option: false
+                show_option: false,
+                divider: this.mode === 1 ? ')' : ']'
             }
         },
         created() {
@@ -99,7 +100,7 @@
                 let spoiler = { text: '', color: '' };
 
                 this.quiz.answers.forEach((answer, index) => {
-                    answer = this.show_option ? answer : answer.slice(answer.indexOf(']')+1);
+                    answer = this.show_option ? answer : answer.slice(answer.indexOf(this.divider)+1);
                     answers.push({
                         text: answer,
                         value: 100+index,
@@ -107,7 +108,7 @@
                     })
                 });
                 this.quiz.fake_answers.forEach((fake_answer, index) => {
-                    fake_answer = this.show_option ? fake_answer : fake_answer.slice(fake_answer.indexOf(']')+1);
+                    fake_answer = this.show_option ? fake_answer : fake_answer.slice(fake_answer.indexOf(this.divider)+1);
                     answers.push({
                         text: fake_answer,
                         value: 10+index,
@@ -127,22 +128,41 @@
                 if (this.checked) return;
                 this.checked = true;
 
-                let is_right = this.answer_codes.every(value => value >= 100) && this.answer_codes.length === this.question_answers.answers.filter(ans => ans.value >= 100).length;
-                // console.log('# check-answer: ' + is_right);
+                let is_right;
 
-                this.question_answers.answers.forEach(answer => {
-                    let text = '',
-                        color = '';
+                if (typeof this.answer_codes === "number") {
+                    is_right = this.answer_codes === 100;
 
-                    if (answer.value >= 100) {
-                        text = 'Дұрыс';
-                        color = this.answer_codes.includes(answer.value) ? 'success' : 'danger';
-                    } else {
-                        color = 'danger';
-                        text = this.answer_codes.includes(answer.value) ? 'Қате' : '';
-                    }
-                    answer.spoiler = { text, color };
-                });
+                    this.question_answers.answers.forEach(answer => {
+                        let text = '',
+                            color = '';
+
+                        if (answer.value === 100) {
+                            text = 'Дұрыс';
+                            color = this.answer_codes === answer.value ? 'success' : 'danger';
+                        } else {
+                            color = 'danger';
+                            text = this.answer_codes === answer.value ? 'Қате' : '';
+                        }
+                        answer.spoiler = { text, color };
+                    })
+                } else {
+                    is_right = this.answer_codes.every(value => value >= 100) && this.answer_codes.length === this.question_answers.answers.filter(ans => ans.value >= 100).length;
+
+                    this.question_answers.answers.forEach(answer => {
+                        let text = '',
+                            color = '';
+
+                        if (answer.value >= 100) {
+                            text = 'Дұрыс';
+                            color = this.answer_codes.includes(answer.value) ? 'success' : 'danger';
+                        } else {
+                            color = 'danger';
+                            text = this.answer_codes.includes(answer.value) ? 'Қате' : '';
+                        }
+                        answer.spoiler = { text, color };
+                    });
+                }
 
                 if (is_right) {
                     this.quizes.splice(this.quizes.indexOf(this.quiz), 1)

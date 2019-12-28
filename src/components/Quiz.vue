@@ -99,7 +99,7 @@
                     let quizes = this.quiz_bank.quizes.filter(quiz => quiz.number === num);
                     return acc.concat(quizes);
                 }, []);
-                console.log(this.exam_quizes.length);
+                // console.log(this.exam_quizes.length);
             },
         },
         components: {
