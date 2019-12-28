@@ -1,10 +1,13 @@
 <template>
     <div>
         <div class="bg-dark text-white">
-            <p class="text-uppercase text-center py-1">
-                {{ quiz_bank.name }}
-            </p>
-            <table v-show="true" class="table table-striped bg-light">
+            <div class="py-1 d-flex" style="cursor: pointer" v-on:click="showInfo = !showInfo">
+                <div class="text-uppercase text-center w-100 ">{{ quiz_bank.name }}</div>
+                <div class="px-2">
+                    <font-awesome-icon :icon="['fas', showInfo ? 'angle-up' : 'angle-down']" style="font-size: x-large" />
+                </div>
+            </div>
+            <table v-show="showInfo" class="table table-striped bg-light">
                 <tr>
                     <td>Код</td>
                     <td>{{ quiz_bank.code }}</td>
@@ -25,7 +28,6 @@
                     <td>Комментарии</td>
                     <td>{{ quiz_bank.comment }}</td>
                 </tr>
-
             </table>
         </div>
 
@@ -70,7 +72,8 @@
         data() {
             return {
                 input_question_range: '1-25',
-                exam_quizes: []
+                exam_quizes: [],
+                showInfo: false
             }
         },
         created() {
