@@ -100,7 +100,7 @@
                 let spoiler = { text: '', color: '' };
 
                 this.quiz.answers.forEach((answer, index) => {
-                    answer = this.show_option ? answer : answer.slice(answer.indexOf(this.divider)+1);
+                    answer = this.show_option ? answer[0] + ' ' + answer[1] : answer[1];
                     answers.push({
                         text: answer,
                         value: 100+index,
@@ -108,7 +108,7 @@
                     })
                 });
                 this.quiz.fake_answers.forEach((fake_answer, index) => {
-                    fake_answer = this.show_option ? fake_answer : fake_answer.slice(fake_answer.indexOf(this.divider)+1);
+                    fake_answer = this.show_option ? fake_answer[0] + ' ' + answer[1] : fake_answer[1];
                     answers.push({
                         text: fake_answer,
                         value: 10+index,

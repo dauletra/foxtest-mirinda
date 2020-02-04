@@ -25,7 +25,7 @@
                         </button>
                     </div>
                 </div>
-                <div class="px-3">
+                <div v-if="last_codes.length > 0" class="px-3">
                     <div class="mt-3">Последние</div>
                     <div v-for="last_code in last_codes" v-bind:key="last_code.code" class="ml-2 font-weight-lighter">
                         <div class="d-flex justify-content-between ">
@@ -43,7 +43,10 @@
                 </div>
             </div>
 
-            <div style="height: 100px;"></div>
+            <div v-if="quiz_version_message.length > 0" class="m-auto alert alert-danger" style="max-width: 350px; width: 100%; height: 100px;">
+                {{quiz_version_message}}
+            </div>
+            <div v-else style="height: 100px;"></div>
 
             <div class="m-auto" style="max-width: 350px; width: 100%">
                 <p class="h5">Из файла</p>
@@ -81,6 +84,8 @@
         name: 'app',
         data() {
             return {
+                version: 0.3,
+                quiz_version_message: '',
                 quiz_bank: {},
                 input_code: {
                     code: '',
@@ -130,12 +135,20 @@
             },
             set_quiz_bank: function(quiz_bank) {
                 console.group('quiz_bank_info');
+
                 console.log('@ Тесты загружены -');
                 console.log('_v = ' + quiz_bank._v);
                 console.log('Количество вопросов: ' + quiz_bank.quizes.length);
                 console.log('[' + Object.keys(quiz_bank).join(', ') + ']');
+                if (quiz_bank._v !== this.version) {
+                    console.log('Сайт не может открыть данную версию теста');
+                    this.quiz_version_message = 'Сайт не может открыть данную версию теста. Версия теста: ' + quiz_bank._v;
+                    return;
+                }
+
                 console.groupEnd('quiz_bank_info');
-                this.update_last_codes(quiz_bank.code);
+
+                // this.update_last_codes(quiz_bank.code);
                 this.quiz_bank = quiz_bank;
             },
             load_quiz_input_code: function() {
@@ -165,7 +178,7 @@
                         }
                     })
                     .catch(error => {
-                        console.error(' - Пришли ошибки. Свяжитесь с разработчиками: ', error);
+                        console.error(' - Ошибка. Свяжитесь с разработчиками: ', error);
                         console.log(error.response.data);
                     })
                     .finally(() => {
