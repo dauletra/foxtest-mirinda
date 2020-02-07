@@ -101,8 +101,7 @@
             let last_codes_list = JSON.parse(last_codes_string) || [];
             this.last_codes = last_codes_list.map(last_code => ({
                 code: last_code,
-                downloading: false,
-                is_removed: false
+                downloading: false
             }));
         },
         methods: {
@@ -127,8 +126,7 @@
                 }
                 this.last_codes.splice(0, 0, {
                     code: code,
-                    downloading: false,
-                    is_removed: false
+                    downloading: false
                 });
                 let last_codes_list = this.last_codes.map(last_code => last_code.code);
                 localStorage.setItem('last_codes', JSON.stringify(last_codes_list));

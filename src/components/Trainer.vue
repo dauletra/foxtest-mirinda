@@ -100,17 +100,17 @@
                 let spoiler = { text: '', color: '' };
 
                 this.quiz.answers.forEach((answer, index) => {
-                    answer = this.show_option ? answer[0] + ' ' + answer[1] : answer[1];
+                    let answer_text = this.show_option ? answer[0] + ' ' + answer[1] : answer[1];
                     answers.push({
-                        text: answer,
+                        text: answer_text,
                         value: 100+index,
                         spoiler
                     })
                 });
                 this.quiz.fake_answers.forEach((fake_answer, index) => {
-                    fake_answer = this.show_option ? fake_answer[0] + ' ' + answer[1] : fake_answer[1];
+                    let fake_answer_text = this.show_option ? fake_answer[0] + ' ' + fake_answer[1] : fake_answer[1];
                     answers.push({
-                        text: fake_answer,
+                        text: fake_answer_text,
                         value: 10+index,
                         spoiler
                     })
