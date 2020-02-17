@@ -7,24 +7,30 @@
             </div>
         </div>
 
-        <div v-if="Object.keys(quiz_bank).length === 0" class="py-4 px-3">
+        <div v-if="Object.keys(quiz_bank).length === 0" class="py-4">
 
-            <div class="m-auto" style="max-width: 350px; width: 100%">
-                <p class="h5">Из интернета</p>
-                <div class="d-flex justify-content-center">
-                    <div class="w-100 mx-2">
-                        <input placeholder="Введите код" v-model.trim="input_code.code" v-on:keyup.enter="load_quiz_input_code" type="text" class="form-control rounded-0" />
-                        <div v-if="input_code.message.length > 0" class="text-danger font-weight-bold small">{{ input_code.message }}</div>
+            <div class="m-auto" style="">
+
+                <div class="d-flex flex-column flex-sm-row justify-content-center">
+                    <div class="text-center pr-sm-3">
+                        <label class="col-form-label" style="font-size: 1.2rem">Введите код теста</label>
                     </div>
-                    <div>
-                        <button type="button" v-on:click="load_quiz_input_code" v-bind:disabled="input_code.downloading" class="btn btn-primary rounded-0" style="width: 95px">
+                    <div class="d-flex justify-content-center align-content-center" >
+                        <div class="pr-sm-3" style="width: 200px">
+                            <input placeholder="code" v-model.trim="input_code.code" v-on:keyup.enter="load_quiz_input_code" type="text" class="form-control rounded-0" style="color: black;" />
+                            <div v-if="input_code.message.length > 0" class="text-danger font-weight-bold small">{{ input_code.message }}</div>
+                        </div>
+                        <div class="">
+                            <button type="button" v-on:click="load_quiz_input_code" v-bind:disabled="input_code.downloading" class="btn btn-primary rounded-0" style="width: 95px">
                             <span v-if="input_code.downloading">
                                 <font-awesome-icon :icon="['fas', 'spinner']" spin />
                             </span>
-                            <span v-else>Загрузить</span>
-                        </button>
+                                <span v-else>Загрузить</span>
+                            </button>
+                        </div>
                     </div>
                 </div>
+
                 <div v-if="last_codes.length > 0" class="px-3">
                     <div class="mt-3">Последние</div>
                     <div v-for="last_code in last_codes" v-bind:key="last_code.code" class="ml-2 font-weight-lighter">
@@ -48,19 +54,26 @@
             </div>
             <div v-else style="height: 100px;"></div>
 
-            <div class="m-auto" style="max-width: 350px; width: 100%">
-                <p class="h5">Из файла</p>
-                <div class="d-flex justify-content-center">
-                    <div class="w-100 mx-2">
-                        <input type="file" ref="jsonFile" class="form-control form-control-file rounded-0" />
-                    </div>
-                    <button type="button" v-on:click="openFile" class="btn btn-primary rounded-0" style="width: 95px">Загрузить</button>
-                </div>
-            </div>
         </div>
 
         <Quiz v-if="Object.keys(quiz_bank).length > 0" v-bind:quiz_bank="quiz_bank" />
 
+
+        <div class="mt-3 small border-top border-bottom">
+            <!-- footer -->
+            <div class="text-center">
+                <span>v0.3</span> |
+                <span>Бурное 2020</span> |
+                <span>
+                    <a href="https://vk.com/dauletra" target="_blank">vk.com/dauletra</a>
+                </span>
+            </div>
+            <div class="text-center">
+                <input type="file" hidden ref="jsonFile" id="quiz_file" v-on:change="openFile" class="form-control form-control-file rounded-0" />
+                <label for="quiz_file" class="text-primary" style="cursor: pointer">Загрузить из файла</label>
+                <!-- <button type="button" v-on:click="openFile" class="btn btn-primary rounded-0" style="width: 95px">Загрузить</button> -->
+            </div>
+        </div>
     </div>
 </template>
 
