@@ -7,16 +7,12 @@
                     <font-awesome-icon :icon="['fas', showInfo ? 'angle-up' : 'angle-down']" style="font-size: x-large" />
                 </div>
             </div>
-            <table v-show="showInfo" class="table table-striped bg-light">
+            <table v-show="showInfo" class="table table-striped table-sm bg-light">
                 <tr>
-                    <td>Код</td>
-                    <td>{{ quiz_bank.code }}</td>
-                </tr>
-                <tr>
-                    <td>Количество вопросов</td>
+                    <td width="220">Количество вопросов</td>
                     <td>{{ quiz_bank.quizes.length }}</td>
                 </tr>
-                <tr>
+                <tr v-if="upsent_numbers.length > 0">
                     <td>Не найденные вопросы</td>
                     <td>{{ upsent_numbers }}</td>
                 </tr>
@@ -24,9 +20,8 @@
                     <td>Дата создания</td>
                     <td>{{ created_time }}</td>
                 </tr>
-                <tr>
-                    <td>Комментарии</td>
-                    <td>{{ quiz_bank.comment }}</td>
+                <tr v-if="quiz_bank.comment.length > 0">
+                    <td colspan="2">Комментарий: "{{ quiz_bank.comment }}"</td>
                 </tr>
             </table>
         </div>
