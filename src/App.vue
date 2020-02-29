@@ -1,52 +1,67 @@
 <template>
     <div class="container-fluid px-0" style="max-width: 700px">
 
-        <div class="text-center border shadow-sm mb-4">
-            <div class="h2">
-                <span>FoxTest</span>
+        <div class="">
+            <div class="h3">
+                <span>foxtest.kz</span>
             </div>
+
+            <blockquote class=" border-left pl-2 my-4" style="max-width: 350px">
+                <span class="small">Никто не может отнять твой шпор, если этот шпор в твоей голове ;)</span>
+            </blockquote>
         </div>
 
         <div v-if="Object.keys(quiz_bank).length === 0" class="py-4">
 
-            <div class="m-auto" style="">
+            <div class="m-auto">
 
                 <div class="d-flex flex-column flex-sm-row justify-content-center">
                     <div class="text-center pr-sm-3">
-                        <label class="col-form-label" style="font-size: 1.2rem">Введите код теста</label>
+                        <label class="col-form-label" style="">Введите код теста</label>
                     </div>
-                    <div class="d-flex justify-content-center align-content-center" >
-                        <div class="pr-sm-3" style="width: 200px">
-                            <input placeholder="code" v-model.trim="input_code.code" v-on:keyup.enter="load_quiz_input_code" type="text" class="form-control rounded-0" style="color: black;" />
-                            <div v-if="input_code.message.length > 0" class="text-danger font-weight-bold small">{{ input_code.message }}</div>
-                        </div>
-                        <div class="">
-                            <button type="button" v-on:click="load_quiz_input_code" v-bind:disabled="input_code.downloading" class="btn btn-primary rounded-0" style="width: 95px">
+                    <div>
+                        <div class="d-flex justify-content-center align-content-center" >
+                            <div class="pr-sm-3" style="width: 200px">
+                                <input placeholder="code" v-model.trim="input_code.code" v-on:keyup.enter="load_quiz_input_code" v-bind:disabled="input_code.downloading"  type="text" class="form-control rounded-0" style="color: black;" />
+                                <div v-if="input_code.message.length > 0" class="text-danger font-weight-bold small">{{ input_code.message }}</div>
+                            </div>
+                            <div class="">
+                                <button type="button" v-on:click="load_quiz_input_code" v-bind:disabled="input_code.downloading" class="btn btn-primary rounded-0" style="width: 95px">
                             <span v-if="input_code.downloading">
                                 <font-awesome-icon :icon="['fas', 'spinner']" spin />
                             </span>
-                                <span v-else>Загрузить</span>
-                            </button>
+                                    <span v-else>Загрузить</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-center">
+                            <div style="width: 290px">
+                                <div v-if="last_codes.length > 0" class="">
+                                    <div class="my-1">Последние</div>
+                                    <div v-for="last_code in last_codes" v-bind:key="last_code.code" class="px-3">
+                                        <div class="d-flex justify-content-between ">
+                                        <span class="">
+                                            <code>{{ last_code.code }}</code>
+                                        </span>
+                                            <a href="#" v-on:click.prevent="load_quiz(last_code)">
+                                            <span v-if="last_code.downloading">
+                                                <font-awesome-icon :icon="['fas', 'spinner']" spin />
+                                            </span>
+                                                <span v-else>загрузить</span>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div v-else>
+                                    <div class="my-1">Например, <code>filosofia</code></div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <div v-if="last_codes.length > 0" class="px-3">
-                    <div class="mt-3">Последние</div>
-                    <div v-for="last_code in last_codes" v-bind:key="last_code.code" class="ml-2 font-weight-lighter">
-                        <div class="d-flex justify-content-between ">
-                            <span class="">
-                                {{ last_code.code }}
-                            </span>
-                            <a href="#" v-on:click.prevent="load_quiz(last_code)">
-                                <span v-if="last_code.downloading">
-                                    <font-awesome-icon :icon="['fas', 'spinner']" spin />
-                                </span>
-                                <span v-else>загрузить</span>
-                            </a>
-                        </div>
-                    </div>
-                </div>
+
             </div>
 
             <div v-if="quiz_version_message.length > 0" class="m-auto alert alert-danger" style="max-width: 350px; width: 100%; height: 100px;">
@@ -54,6 +69,112 @@
             </div>
             <div v-else style="height: 100px;"></div>
 
+            <div class="d-flex flex-column justify-content-center">
+                <div class="text-center h5">Как загрузить тест на сайт?</div>
+
+                <div class="my-4">
+                    <div class="text-center"><span class="font-weight-bold original-font">Отправляете</span> нам тест удобным способым</div>
+                    <div class="d-flex justify-content-center mt-2">
+                        <a href="#" class="btn btn-outline-primary">
+                            <font-awesome-icon :icon="['fab', 'vk']" size="lg" style="color: #45668e" /> dauletra
+                        </a>
+                        <a href="#" class="btn btn-outline-primary mx-2">
+                            <font-awesome-icon :icon="['fab', 'whatsapp']" size="lg" style="color: #225f1e" /> <span style="color: black;">8(747)1126303</span>
+                        </a>
+                        <a href="#" class="btn btn-outline-primary">
+                            <font-awesome-icon :icon="['fab', 'instagram']" size="lg" style="color: #833ab4" /> dauletra
+                        </a>
+                    </div>
+                </div>
+
+                <div class="my-4">
+                    <div class="text-center">
+                        <span class=" font-weight-bold original-font">Ждете</span> пока мы загружаем ваш тест на сайт
+                    </div>
+                    <div class="text-center mt-2">
+                        <font-awesome-icon :icon="['fas', 'user-clock']" size="3x" style="color: #8d8d8d" />
+                    </div>
+                    <div class="small m-auto text-center mt-2" style="width: 320px">Загрузка теста на сайт может занять до 4-ч часов в зависимости от нагруженности</div>
+                </div>
+
+                <div class="my-4">
+                    <div class="text-center"><span class="font-weight-bold original-font">Получаете</span> код вашего теста</div>
+                    <div class="text-center mt-2">
+                        <font-awesome-icon :icon="['fab', 'vk']" size="lg" style="color: #45668e" />
+                        <font-awesome-icon :icon="['fab', 'whatsapp']" size="lg" style="color: #225f1e" class="mx-2" />
+                        <font-awesome-icon :icon="['fab', 'instagram']" size="lg" style="color: #833ab4" />
+                    </div>
+                </div>
+            </div>
+            <div style="height: 50px;"></div>
+
+            <div class="d-flex flex-column justify-content-center">
+                <div class="text-center h5">Какие тесты принимает сайт?</div>
+
+                <div class="d-flex my-3">
+                    <div><font-awesome-icon icon="check" size="lg" class="mr-2" style="color: forestgreen" /></div>
+                    <div>
+                        <div>Формат файла</div>
+                        <div class=" p-2 mt-2">
+                            <img width="40" v-bind:src="ms_word" />
+                            MS Word</div>
+                    </div>
+                </div>
+                <div class="d-flex">
+                    <div><font-awesome-icon icon="check" size="lg" class="mr-2" style="color: forestgreen" /></div>
+                    <div>
+                        <div>Содержание теста</div>
+                        <div class="p-2 mt-2">
+                            <font-awesome-icon icon="font" style="color: #2b496e;" /> Текст <br/>
+                            <font-awesome-icon icon="superscript" style="color: #2b496e;" /> Формула <br/>
+                            <font-awesome-icon icon="chart-pie" style="color: #2b496e;" /> Изображение
+                        </div>
+                    </div>
+                </div>
+                <div class="d-flex my-3">
+                    <div><font-awesome-icon icon="check" size="lg" class="mr-2" style="color: forestgreen" /></div>
+                    <div>
+                        <div>Варианты ответа</div>
+                        <div class="p-2 mt-2">
+                            <font-awesome-icon :icon="['far', 'check-circle']" style="color: #2b496e;" /> один ответ или <br/>
+                            <font-awesome-icon :icon="['far', 'check-square']" style="color: #2b496e;" /> несколько ответов<br/>
+                        </div>
+                    </div>
+                </div>
+                <div class="d-flex">
+                    <div><font-awesome-icon icon="check" size="lg" class="mr-2" style="color: forestgreen" /></div>
+                    <div class="w-100">
+                        <div>Варианты ответа</div>
+                        <div class="row no-gutters mt-3">
+                            <div class="col-12 col-sm-6 border">
+                                <div class="border-bottom p-2"><font-awesome-icon :icon="['far', 'check-circle']" style="color: #2b496e;" /> один ответ</div>
+                                <div class="p-2">
+                                    <div><span class="of">2.</span> В каком году Эйнштейн получил Нобельевскую премию? (Во всех воросах вариант А должен быть правильным)
+                                        <span class="of">&para;</span></div>
+                                    <div>A<span class="of">)</span> 1922 г<span class="of">&para;</span></div>
+                                    <div>B<span class="of">)</span> 1914 г<span class="of">&para;</span></div>
+                                    <div>C<span class="of">)</span> 1921 г<span class="of">&para;</span></div>
+                                    <div>D<span class="of">)</span> 1926 г<span class="of">&para;</span></div>
+                                    <div>E<span class="of">)</span> 1918 г<span class="of">&para;</span></div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-6 border mt-2 mt-sm-0">
+                                <div class="border-bottom p-2"><font-awesome-icon :icon="['far', 'check-square']" style="color: #2b496e;" /> несколько ответов</div>
+                                <div class="p-2">
+                                    <div><span class="of">2.</span> В каком году Эйнштейн получил Нобельевскую премию? (В данном вопросе правильные ответы B, C, D)
+                                        <span class="of">&para;</span></div>
+                                    <div>A<span class="of">)</span> <span class="of">[</span>0.0<span class="of">]</span> 1922 г<span class="of">&para;</span></div>
+                                    <div>B<span class="of">)</span> <span class="of">[</span>0.6<span class="of">]</span> 1914 г<span class="of">&para;</span></div>
+                                    <div>C<span class="of">)</span> <span class="of">[</span>0.7<span class="of">]</span> 1921 г<span class="of">&para;</span></div>
+                                    <div>D<span class="of">)</span> <span class="of">[</span>0.7<span class="of">]</span> 1926 г<span class="of">&para;</span></div>
+                                    <div>E<span class="of">)</span> <span class="of">[</span>0.0<span class="of">]</span> 1918 г<span class="of">&para;</span></div>
+                                    <div>F<span class="of">)</span> <span class="of">[</span>0.0<span class="of">]</span> 1918 г<span class="of">&para;</span></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <Quiz v-if="Object.keys(quiz_bank).length > 0" v-bind:quiz_bank="quiz_bank" />
@@ -80,9 +201,9 @@
 <script>
     import axios from 'axios'
     import Quiz from './components/Quiz'
+    import ms_word from './assets/ms_word.png'
 
     // todo Сайттың фонын өзгерту
-    // todo сайтты қайта ашқанда соңғы тест автоматический загружать етіледі
     // todo Тест біткеннен кейін келесі 25|50|100 сұрақты бірден ашу мүмкіндігі
     // todo Тестті қанша сұрақтан бөліп өтетінін (25|50|100) настройкада сақтай алады
 
@@ -98,6 +219,7 @@
         data() {
             return {
                 version: 0.3,
+                ms_word: ms_word,
                 quiz_version_message: '',
                 quiz_bank: {},
                 input_code: {
@@ -105,11 +227,29 @@
                     downloading: false,
                     message: ''
                 },
-                last_codes: []
+                last_codes: [
+                    {
+                        code: 'fizika',
+                        downloading: false
+                    },
+                    {
+                        code: 'mathemat',
+                        downloading: false
+                    },
+                    {
+                        code: 'termodynamics',
+                        downloading: false
+                    },
+                    {
+                        code: 'algebra',
+                        downloading: false
+                    }
+                ]
             }
         },
         computed: {},
         created() {
+            return;
             let last_codes_string = localStorage.getItem('last_codes');
             let last_codes_list = JSON.parse(last_codes_string) || [];
             this.last_codes = last_codes_list.map(last_code => ({
@@ -221,5 +361,10 @@
 </script>
 
 <style>
-
+    .original-font {
+        color: #dc3545;
+    }
+    .of {
+        color: #dc3545;
+    }
 </style>
