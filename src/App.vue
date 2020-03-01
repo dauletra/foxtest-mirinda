@@ -1,14 +1,33 @@
 <template>
-    <div class="container-fluid px-0" style="max-width: 700px">
+    <div class="container-fluid px-0 border" style="max-width: 700px">
+        <div class="h3 d-flex justify-content-between">
+            <span>
+                <span class="original-font">fox</span><span class="">test.kz</span>
+            </span>
+            <span>
+                <font-awesome-icon :icon="['fab', 'vk']" style="color: #45668e" />
+                <font-awesome-icon :icon="['fab', 'instagram']" class="mx-2" style="color: #833ab4" />
+            </span>
+        </div>
 
-        <div class="">
-            <div class="h3">
-                <span>foxtest.kz</span>
+        <div v-if="Object.keys(quiz_bank).length === 0" class="row no-gutters py-4  my-header">
+            <div class="header-bg"></div>
+            <div class="h1 col-12 col-sm-8 p-4">
+                <div class="pl-4 font-weight-bold" style="">
+                    <span class="of">В</span><span class="">ыучить</span><br/>
+                    <span class="">тест</span><br/>
+                    <span class="of">л</span><span class="">егко</span><br/>
+                    <span class="text-warning h2" style="">и <span class="">б</span>есплатно</span>
+                </div>
             </div>
-
-            <blockquote class=" border-left pl-2 my-4" style="max-width: 350px">
-                <span class="small">Никто не может отнять твой шпор, если этот шпор в твоей голове ;)</span>
-            </blockquote>
+            <div class="position-relative d-none d-sm-block col-sm-4" style="height: 330px; transform: rotate(-2deg);">
+                <div class="position-absolute">
+                    <img src="./assets/mobile.gif" width="138" style="margin-left: 11px; margin-top: 13px" />
+                </div>
+                <div class="position-absolute">
+                    <img src="./assets/iphone.png" width="160" class="" style="" />
+                </div>
+            </div>
         </div>
 
         <div v-if="Object.keys(quiz_bank).length === 0" class="py-4">
@@ -70,7 +89,7 @@
             <div v-else style="height: 100px;"></div>
 
             <div class="d-flex flex-column justify-content-center">
-                <div class="text-center h5">Как загрузить тест на сайт?</div>
+                <div class="text-center h5 font-weight-bold">Как загрузить тест на сайт?</div>
 
                 <div class="my-4">
                     <div class="text-center"><span class="font-weight-bold original-font">Отправляете</span> нам тест удобным способым</div>
@@ -109,67 +128,59 @@
             <div style="height: 50px;"></div>
 
             <div class="d-flex flex-column justify-content-center">
-                <div class="text-center h5">Какие тесты принимает сайт?</div>
+                <div class="text-center h5 font-weight-bold">Какие тесты принимает сайт?</div>
 
-                <div class="d-flex my-3">
-                    <div><font-awesome-icon icon="check" size="lg" class="mr-2" style="color: forestgreen" /></div>
-                    <div>
-                        <div>Формат файла</div>
-                        <div class=" p-2 mt-2">
-                            <img width="40" v-bind:src="ms_word" />
-                            MS Word</div>
+                <div class="mt-4">
+                    <div class="text-center">
+                        <font-awesome-icon icon="check" size="lg" class="mr-2" style="color: forestgreen" />
+                        Формат файла
+                    </div>
+                    <div class="p-2 text-center">
+                        <img width="40" v-bind:src="ms_word" />
+                        MS Word</div>
+                </div>
+
+                <div class="mt-4">
+                    <div class="text-center">
+                        <font-awesome-icon icon="check" size="lg" class="mr-2" style="color: forestgreen" />
+                        Содержание теста
+                    </div>
+                    <div class="p-2 text-center">
+                        <font-awesome-icon icon="font" style="color: #2b496e;" /> Текст
+                        <span class="mx-3"><font-awesome-icon icon="superscript" style="color: #2b496e;" /> Формула</span>
+                        <font-awesome-icon icon="chart-pie" style="color: #2b496e;" /> Изображение
                     </div>
                 </div>
-                <div class="d-flex">
-                    <div><font-awesome-icon icon="check" size="lg" class="mr-2" style="color: forestgreen" /></div>
-                    <div>
-                        <div>Содержание теста</div>
-                        <div class="p-2 mt-2">
-                            <font-awesome-icon icon="font" style="color: #2b496e;" /> Текст <br/>
-                            <font-awesome-icon icon="superscript" style="color: #2b496e;" /> Формула <br/>
-                            <font-awesome-icon icon="chart-pie" style="color: #2b496e;" /> Изображение
-                        </div>
+
+                <div class="mt-4">
+                    <div class="text-center">
+                        <font-awesome-icon icon="check" size="lg" class="mr-2" style="color: forestgreen" />
+                        Варианты ответа и структура теста
                     </div>
-                </div>
-                <div class="d-flex my-3">
-                    <div><font-awesome-icon icon="check" size="lg" class="mr-2" style="color: forestgreen" /></div>
-                    <div>
-                        <div>Варианты ответа</div>
-                        <div class="p-2 mt-2">
-                            <font-awesome-icon :icon="['far', 'check-circle']" style="color: #2b496e;" /> один ответ или <br/>
-                            <font-awesome-icon :icon="['far', 'check-square']" style="color: #2b496e;" /> несколько ответов<br/>
-                        </div>
-                    </div>
-                </div>
-                <div class="d-flex">
-                    <div><font-awesome-icon icon="check" size="lg" class="mr-2" style="color: forestgreen" /></div>
-                    <div class="w-100">
-                        <div>Варианты ответа</div>
-                        <div class="row no-gutters mt-3">
-                            <div class="col-12 col-sm-6 border">
-                                <div class="border-bottom p-2"><font-awesome-icon :icon="['far', 'check-circle']" style="color: #2b496e;" /> один ответ</div>
-                                <div class="p-2">
-                                    <div><span class="of">2.</span> В каком году Эйнштейн получил Нобельевскую премию? (Во всех воросах вариант А должен быть правильным)
-                                        <span class="of">&para;</span></div>
-                                    <div>A<span class="of">)</span> 1922 г<span class="of">&para;</span></div>
-                                    <div>B<span class="of">)</span> 1914 г<span class="of">&para;</span></div>
-                                    <div>C<span class="of">)</span> 1921 г<span class="of">&para;</span></div>
-                                    <div>D<span class="of">)</span> 1926 г<span class="of">&para;</span></div>
-                                    <div>E<span class="of">)</span> 1918 г<span class="of">&para;</span></div>
-                                </div>
+                    <div class="row no-gutters mt-3">
+                        <div class="col-12 col-sm-6 border">
+                            <div class="border-bottom p-2"><font-awesome-icon :icon="['far', 'check-circle']" style="color: #2b496e;" /> один ответ</div>
+                            <div class="p-2">
+                                <div><span class="of">2.</span> В каком году Эйнштейн получил Нобельевскую премию? (Во всех воросах вариант А должен быть правильным)
+                                    <span class="of">&para;</span></div>
+                                <div>A<span class="of">)</span> 1922 г<span class="of">&para;</span></div>
+                                <div>B<span class="of">)</span> 1914 г<span class="of">&para;</span></div>
+                                <div>C<span class="of">)</span> 1921 г<span class="of">&para;</span></div>
+                                <div>D<span class="of">)</span> 1926 г<span class="of">&para;</span></div>
+                                <div>E<span class="of">)</span> 1918 г<span class="of">&para;</span></div>
                             </div>
-                            <div class="col-12 col-sm-6 border mt-2 mt-sm-0">
-                                <div class="border-bottom p-2"><font-awesome-icon :icon="['far', 'check-square']" style="color: #2b496e;" /> несколько ответов</div>
-                                <div class="p-2">
-                                    <div><span class="of">2.</span> В каком году Эйнштейн получил Нобельевскую премию? (В данном вопросе правильные ответы B, C, D)
-                                        <span class="of">&para;</span></div>
-                                    <div>A<span class="of">)</span> <span class="of">[</span>0.0<span class="of">]</span> 1922 г<span class="of">&para;</span></div>
-                                    <div>B<span class="of">)</span> <span class="of">[</span>0.6<span class="of">]</span> 1914 г<span class="of">&para;</span></div>
-                                    <div>C<span class="of">)</span> <span class="of">[</span>0.7<span class="of">]</span> 1921 г<span class="of">&para;</span></div>
-                                    <div>D<span class="of">)</span> <span class="of">[</span>0.7<span class="of">]</span> 1926 г<span class="of">&para;</span></div>
-                                    <div>E<span class="of">)</span> <span class="of">[</span>0.0<span class="of">]</span> 1918 г<span class="of">&para;</span></div>
-                                    <div>F<span class="of">)</span> <span class="of">[</span>0.0<span class="of">]</span> 1918 г<span class="of">&para;</span></div>
-                                </div>
+                        </div>
+                        <div class="col-12 col-sm-6 border mt-2 mt-sm-0">
+                            <div class="border-bottom p-2"><font-awesome-icon :icon="['far', 'check-square']" style="color: #2b496e;" /> несколько ответов</div>
+                            <div class="p-2">
+                                <div><span class="of">2.</span> В каком году Эйнштейн получил Нобельевскую премию? (В данном вопросе правильные ответы B, C, D)
+                                    <span class="of">&para;</span></div>
+                                <div>A<span class="of">)</span> <span class="of">[</span>0.0<span class="of">]</span> 1922 г<span class="of">&para;</span></div>
+                                <div>B<span class="of">)</span> <span class="of">[</span>0.6<span class="of">]</span> 1914 г<span class="of">&para;</span></div>
+                                <div>C<span class="of">)</span> <span class="of">[</span>0.7<span class="of">]</span> 1921 г<span class="of">&para;</span></div>
+                                <div>D<span class="of">)</span> <span class="of">[</span>0.7<span class="of">]</span> 1926 г<span class="of">&para;</span></div>
+                                <div>E<span class="of">)</span> <span class="of">[</span>0.0<span class="of">]</span> 1918 г<span class="of">&para;</span></div>
+                                <div>F<span class="of">)</span> <span class="of">[</span>0.0<span class="of">]</span> 1918 г<span class="of">&para;</span></div>
                             </div>
                         </div>
                     </div>
@@ -367,4 +378,21 @@
     .of {
         color: #dc3545;
     }
+
+    .orange-font {
+        color: orange;
+    }
+    .my-header {
+        position: relative;
+        z-index: 1;
+    }
+    .my-header .header-bg {
+        position: absolute;
+        z-index: -1;
+        background: url(./assets/test-header-naklon.jpg) no-repeat center;
+        opacity: .3;
+        width: 100%;
+        height: 100%;
+    }
+
 </style>
