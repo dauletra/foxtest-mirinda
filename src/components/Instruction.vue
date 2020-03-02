@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="d-flex flex-column justify-content-center">
-            <div class="text-center h5 font-weight-bold">Как загрузить тест на сайт?</div>
+            <div class="text-center h4 font-weight-bold">Как загрузить тест на сайт?</div>
 
             <div class="my-4">
                 <div class="text-center"><sp class="font-weight-bold">Отправляете</sp> нам тест удобным способым</div>
@@ -40,7 +40,7 @@
         <div style="height: 50px;"></div>
 
         <div class="d-flex flex-column justify-content-center">
-            <div class="text-center h5 font-weight-bold">Какие тесты принимает сайт?</div>
+            <div class="text-center h4 font-weight-bold">Какие тесты принимает сайт?</div>
 
             <div class="mt-4">
                 <div class="text-center">

@@ -1,12 +1,14 @@
 <template>
-    <div class="container-fluid px-0 border" style="max-width: 700px">
-        <div class="h3 d-flex justify-content-between">
+    <div class="container-fluid px-0" style="max-width: 700px">
+        <div class="h3 d-flex justify-content-center">
             <!-- header -->
             <span>
-                <sp>fox</sp><span class="">test.kz</span>
+                <a href="/" class="text-decoration-none">
+                    <sp>fox</sp><span class="" style="color: black;">test.kz</span>
+                </a>
             </span>
-            <span>
-                <font-awesome-icon :icon="['fab', 'vk']" style="color: #45668e" />
+            <span class="d-none">
+                <font-awesome-icon :icon="['fab', 'vk']" class="mx-2" style="color: #45668e" />
                 <font-awesome-icon :icon="['fab', 'instagram']" class="mx-2" style="color: #833ab4" />
             </span>
         </div>
@@ -14,11 +16,11 @@
 
         <Hero v-if="home" />
 
-        <Loader v-if="home" v-on:set_quiz_bank="set_quiz_bank" />
+        <Loader v-if="home" v-on:set_quiz_bank="set_quiz_bank" class="mt-3" />
 
-        <Quiz v-if="!home" v-bind:quiz_bank="quiz_bank" />
+        <Quiz v-if="!home" v-bind:quiz_bank="quiz_bank" class="mt-3" />
 
-        <Instruction v-if="home" />
+        <Instruction v-if="home" class="mt-5" />
 
 
         <div class="mt-3 small border-top border-bottom">
@@ -68,7 +70,6 @@
                 console.log('[' + Object.keys(quiz_bank).join(', ') + ']');
                 if (quiz_bank._v !== this.version) {
                     console.log('Сайт не может открыть данную версию теста');
-                    this.quiz_version_message = 'Сайт не может открыть данную версию теста. Версия теста: ' + quiz_bank._v;
                     return;
                 }
                 console.groupEnd('quiz_bank_info');

@@ -1,5 +1,5 @@
 <template>
-    <div class="row no-gutters py-4 my-header">
+    <div class="row no-gutters my-header">
         <div class="header-bg"></div>
         <div class="h2 col-12 col-sm-8 p-4">
             <div class="pl-4 font-weight-bold" style="">
@@ -9,7 +9,7 @@
                 <span class="text-warning h2" style="">и бесплатно</span>
             </div>
         </div>
-        <div class="position-relative d-none d-sm-block col-sm-4" style="height: 330px; transform: rotate(-2deg);">
+        <div class="position-relative d-none d-sm-block col-sm-4 pl-4" style="height: 330px; transform: rotate(-8deg);">
             <div class="position-absolute">
                 <img src="../assets/mobile.gif" width="138" style="margin-left: 11px; margin-top: 13px" />
             </div>
