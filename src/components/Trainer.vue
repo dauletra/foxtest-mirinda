@@ -2,7 +2,10 @@
     <div>
         <div v-if="quizes.length > 0" class="border d-flex" style="height: 60px">
             <div class="border shadow-sm d-flex align-items-center">
-                <div class="text-center text-secondary font-weight-bold px-2">{{ quizes.length }}</div>
+                <div class="text-center text-secondary font-weight-bold px-2">
+                    {{ quizes.length }}<br/>
+                    <sp>{{ mistakes }}</sp>
+                </div>
             </div>
             <div class="d-flex align-items-center px-2 border-right w-100 white-space: nowrap" style="overflow-x: auto">
                 <a href="#" class="px-2" v-for="(quiz, index) in quizes" v-bind:key="index" v-on:click.prevent="next_question(quiz.id)">{{ quiz.number }}</a>
@@ -10,15 +13,27 @@
         </div>
 
         <div v-else class="alert-success text-center font-weight-bold p-2 border rounded">
-            Вопросы закончились
+            Вопросы закончились<br/>
+            <span v-if="mistakes > 0">
+                Вы допустили <sp>{{mistakes}}</sp> <span v-if="mistakes === 1">ошибку</span> <span v-else>ошибки</span>
+            </span>
+            <span v-else>
+                Вы молодец! Ни одной ошибки!
+            </span>
         </div>
 
-        <div class="px-1 pt-3" style="overflow-x: auto;">
+        <div class="px-2 pt-3" style="overflow-x: auto;">
             <div class="text-right">
-                <label for="show_option_id" v-bind:class="['mr-1', show_option ? '' : 'text-muted']">Показать буквы</label>
-                <input type="checkbox" id="show_option_id" v-model="show_option" />
+                <label for="show_option_id" v-bind:class="['mr-1', show_option ? '' : 'text-muted']">
+                    <span v-if="!show_option">Показать ответы</span>
+                    <span v-else>
+                        <span v-if="mode === 1">Правильный вариант: А)</span>
+                        <span v-else>Правильные варианты [больше нуля]</span>
+                    </span>
+                </label>
+                <input type="checkbox" v-bind:disabled="checked" id="show_option_id" v-model="show_option" />
             </div>
-            <div v-touch:swipe.left="next_question" v-touch:swipe.right="check_answer">
+            <div v-touch:swipe.left="next_question">
                 <p v-html="question_answers.question" onselectstart="return false" onmousedown="return false"></p>
                 <div v-for="answer in question_answers.answers" v-bind:key="answer.value" class="d-flex">
                 <span v-bind:class="['text-'+answer.spoiler.color, 'font-weight-bold']">
@@ -47,6 +62,11 @@
 </template>
 
 <script>
+    import sp from './sp'
+
+    // todo Вместо Прав. и Неправ. показать иконку. + рядом с количеством ошибок показать иконку ошибки
+    // todo В конце теста предложить пройти снова или перейти на следующие вопросы
+
     function shuffle_array(array) {
         for (let i = array.length - 1; i > 0; i--) {
             let j = Math.floor(Math.random() * (i + 1));
@@ -66,10 +86,10 @@
                 quizes: [...this.exam_quizes],
                 answer_codes: [],
                 checked: '',
+                mistakes: 0,
                 question_answers: {},
                 quiz: {},
-                show_option: false,
-                divider: this.mode === 1 ? ')' : ']'
+                show_option: false
             }
         },
         created() {
@@ -78,7 +98,11 @@
         watch: {
             exam_quizes: function(val) {
                 this.quizes = [...val];
+                this.mistakes = 0;
                 this.next_question();
+            },
+            show_option: function(val) {
+                this.next_question(this.quiz.number);
             }
         },
         computed: {},
@@ -141,11 +165,11 @@
                             color = '';
 
                         if (answer.value === 100) {
-                            text = 'Дұрыс';
+                            text = 'Прав.';
                             color = this.answer_codes === answer.value ? 'success' : 'danger';
                         } else {
                             color = 'danger';
-                            text = this.answer_codes === answer.value ? 'Қате' : '';
+                            text = this.answer_codes === answer.value ? 'Неправ.' : '';
                         }
                         answer.spoiler = { text, color };
                     })
@@ -157,11 +181,11 @@
                             color = '';
 
                         if (answer.value >= 100) {
-                            text = 'Дұрыс';
+                            text = 'Прав.';
                             color = this.answer_codes.includes(answer.value) ? 'success' : 'danger';
                         } else {
                             color = 'danger';
-                            text = this.answer_codes.includes(answer.value) ? 'Қате' : '';
+                            text = this.answer_codes.includes(answer.value) ? 'Неправ.' : '';
                         }
                         answer.spoiler = { text, color };
                     });
@@ -171,8 +195,12 @@
                     this.quizes.splice(this.quizes.indexOf(this.quiz), 1)
                 } else {
                     this.quizes.push(this.quiz);
+                    this.mistakes += 1;
                 }
             }
+        },
+        components: {
+            sp
         }
     }
 </script>

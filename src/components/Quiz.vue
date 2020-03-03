@@ -10,23 +10,27 @@
             <table v-show="showInfo" class="table table-striped table-sm bg-light">
                 <tr>
                     <td width="220">Количество вопросов</td>
-                    <td>{{ quiz_bank.quizes.length }}</td>
+                    <td>{{ quiz_bank.quizes.length }} вопросов</td>
                 </tr>
                 <tr v-if="upsent_numbers.length > 0">
                     <td>Не найденные вопросы</td>
-                    <td>{{ upsent_numbers }}</td>
+                    <td>№{{ upsent_numbers }}</td>
+                </tr>
+                <tr v-if="dublicate_numbers.length > 0">
+                    <td>Вопросы с одинаковыми номерами</td>
+                    <td>№{{dublicate_numbers }}</td>
                 </tr>
                 <tr>
                     <td>Дата создания</td>
-                    <td>{{ created_time }}</td>
+                    <td>{{ quiz_bank.created | format_date }}</td>
                 </tr>
-                <tr v-if="quiz_bank.comment.length > 0">
-                    <td colspan="2">Комментарий: "{{ quiz_bank.comment }}"</td>
+                <tr v-if="quiz_bank.comment.length > 0" class="">
+                    <td colspan="2" class="py-3">Комментарий: "{{ quiz_bank.comment }}"</td>
                 </tr>
             </table>
         </div>
 
-        <div class="d-flex justify-content-center mb-3">
+        <div class="d-flex justify-content-center my-4">
             <div style="max-width: 290px; width: 100%">
                 <div class="text-muted">Вопросы: {{ quiz_range }}</div>
                 <div class="d-flex">
@@ -48,20 +52,12 @@
 </template>
 
 <script>
-    /*
-    FoxTest _v=0.2
-     */
 
     import Trainer from './Trainer'
 
     const range = (raw) => {
         let [start, end] = raw.split("-").map((e) => Number(e));
         return Array.from({length: (end-start+1)}, (v, k) => k + start);
-    };
-
-    const date_to_str = (secs) => {
-        let date = new Date(secs * 1000);
-        return  date.getDate() + '.'+(date.getMonth()+1) + '.'+date.getFullYear(); //+" "+date.getHours()+':'+date.getMinutes();
     };
 
     export default {
@@ -88,8 +84,13 @@
                 let numbers = range(this.quiz_range);
                 return numbers.filter(number => !this.quiz_numbers.includes(number)).join(', ');
             },
-            created_time: function() {
-                return date_to_str(this.quiz_bank.created);
+            dublicate_numbers: function() {
+                return this.quiz_numbers.reduce((acc, value, index, array) => {
+                    if (array.indexOf(value, index+1) !== -1) {
+                        acc.push(value);
+                    }
+                    return acc;
+                }, []).join(', ')
             },
             input_question_range_numbers: function() {
                 let regpat = /\d{1,3}-\d{1,3}|\d{1,3}/g;
@@ -104,6 +105,16 @@
                     }
                 }
                 return numbers.filter((n) => this.quiz_numbers.includes(n));
+            }
+        },
+        filters: {
+            format_date: function(secs) {
+                let date = new Date(secs * 1000);
+                let day = date.getDate().toString().padStart(2, '0');
+                let month = (date.getMonth() + 1).toString().padStart(2, '0');
+                let hours = date.getHours().toString().padStart(2, '0');
+                let minutes = date.getMinutes().toString().padStart(2, '0');
+                return  day + '.'+month + '.'+date.getFullYear() + " " + hours + ':' + minutes;
             }
         },
         methods: {
