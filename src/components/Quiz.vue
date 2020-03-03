@@ -30,23 +30,34 @@
             </table>
         </div>
 
-        <div class="d-flex justify-content-center my-4">
-            <div style="max-width: 290px; width: 100%">
-                <div class="text-muted">Вопросы: {{ quiz_range }}</div>
-                <div class="d-flex">
-                    <div class="w-100 mr-2">
-                        <input v-model="input_question_range" v-on:keyup.enter="set_exam_quizes" type="text" class="form-control rounded-0" />
+        <div class="my-4">
+            <div class="m-auto" style="max-width: 290px;">
+                <div class="">
+                    <div class="text-muted">Вопросы: {{ quiz_range }}</div>
+                    <div class="d-flex">
+                        <div class="w-100 mr-2">
+                            <input v-model="input_question_range" v-on:keyup.enter="set_exam_quizes" type="text" class="form-control rounded-0" />
+                        </div>
+                        <button type="button" v-on:click="set_exam_quizes" class="btn btn-outline-primary rounded-0">Начать</button>
                     </div>
-                    <button type="button" v-on:click="set_exam_quizes" class="btn btn-outline-primary rounded-0">Начать</button>
+                    <div v-show="input_question_range_message.length > 0" class="text-success font-weight-lighter">
+                        {{ input_question_range_message }}
+                    </div>
                 </div>
-                <div v-if="exam_quizes.length === 0" class="text-success font-weight-lighter">
-                    Неправильный диапазон вопросов
+
+                <div class="my-2" style="">
+                    <div>Начать быстро</div>
+                    <div class="text-center">
+                        <span>100-100</span>
+                        <span class="mx-3">100-150</span>
+                        <span>150-200</span>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <div v-if="exam_quizes.length > 0">
-            <Trainer v-bind:exam_quizes="exam_quizes" v-bind:mode="quiz_bank.mode" />
+        <div v-if="seance > 0">
+            <Trainer v-bind:exam_quizes="exam_quizes" v-bind:mode="quiz_bank.mode" v-bind:seance="seance" />
         </div>
     </div>
 </template>
@@ -66,7 +77,9 @@
         data() {
             return {
                 input_question_range: '1-25',
+                input_question_range_message: '',
                 exam_quizes: [],
+                seance: 0,
                 showInfo: false
             }
         },
@@ -119,11 +132,19 @@
         },
         methods: {
             set_exam_quizes: function() {
-                this.exam_quizes = this.input_question_range_numbers.reduce((acc, num) => {
+                let exam_quizes = this.input_question_range_numbers.reduce((acc, num) => {
                     let quizes = this.quiz_bank.quizes.filter(quiz => quiz.number === num);
                     return acc.concat(quizes);
                 }, []);
-                // console.log(this.exam_quizes.length);
+
+                if (exam_quizes.length === 0) {
+                    this.input_question_range_message = 'Неверный диапазон вопросов';
+                    return;
+                } else {
+                    this.input_question_range_message = '';
+                }
+                this.exam_quizes = [...exam_quizes];
+                this.seance = + new Date();
             },
         },
         components: {
