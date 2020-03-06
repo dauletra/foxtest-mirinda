@@ -44,20 +44,24 @@
                         {{ input_question_range_message }}
                     </div>
                 </div>
-
-                <div class="my-2" style="">
-                    <div>Начать быстро</div>
-                    <div class="text-center">
-                        <span>100-100</span>
-                        <span class="mx-3">100-150</span>
-                        <span>150-200</span>
-                    </div>
-                </div>
             </div>
         </div>
 
-        <div v-if="seance > 0">
-            <Trainer v-bind:exam_quizes="exam_quizes" v-bind:mode="quiz_bank.mode" v-bind:seance="seance" />
+        <div v-if="seance.id > 0">
+            <div v-show="seance.quizes.length === 0" class="my-2 alert alert-success" style="">
+                <div class="text-center mb-2">Вы ответили на {{ seance.correct_answers + seance.incorrect_answers }} вопрос(а)</div>
+                <div class="text-center">
+                    <thumbs v-bind:up="seance.correct_answers" v-bind:down="seance.incorrect_answers" />
+                </div>
+                <div v-if="seance.next_range.length > 0" class="d-flex justify-content-between m-auto" style="width: 280px">
+                        <span class="align-self-center w-100 py-1 px-2 mr-2" style="height: 2.1rem;">
+                            Следующие: <span class="font-weight-bold">{{ seance.next_range }}</span>
+                        </span>
+                    <button class="btn btn-outline-success btn-sm rounded-0" v-on:click="set_next_range">Перейди</button>
+                </div>
+            </div>
+
+            <Trainer v-bind:seance="seance" />
         </div>
     </div>
 </template>
@@ -65,6 +69,8 @@
 <script>
 
     import Trainer from './Trainer'
+    import sp from './sp'
+    import thumbs from './thumbs'
 
     const range = (raw) => {
         let [start, end] = raw.split("-").map((e) => Number(e));
@@ -78,8 +84,14 @@
             return {
                 input_question_range: '1-25',
                 input_question_range_message: '',
-                exam_quizes: [],
-                seance: 0,
+                seance: {
+                    id: 0,
+                    mode: 0,
+                    quizes: [],
+                    correct_answers: 0,
+                    incorrect_answers: 0,
+                    next_range: '1-30'
+                },
                 showInfo: false
             }
         },
@@ -143,12 +155,31 @@
                 } else {
                     this.input_question_range_message = '';
                 }
-                this.exam_quizes = [...exam_quizes];
-                this.seance = + new Date();
+
+                let next_min = Math.max(...this.input_question_range_numbers) + 1;
+                let next_max = next_min + next_min - Math.min(...this.input_question_range_numbers);
+                let quiz_max = Math.max(...this.quiz_numbers);
+                next_max = next_max >= quiz_max ? quiz_max : next_max;
+                let next_range = next_min >= quiz_max ? '' : next_min + '-' + next_max;
+
+                this.seance = {
+                    id: +new Date(),
+                    mode: this.quiz_bank.mode,
+                    quizes: [...exam_quizes],
+                    correct_answers: 0,
+                    incorrect_answers: 0,
+                    next_range: next_range
+                };
             },
+            set_next_range: function() {
+                this.input_question_range = this.seance.next_range;
+                this.set_exam_quizes();
+            }
         },
         components: {
-            Trainer
+            Trainer,
+            // sp,
+            thumbs
         }
     }
 </script>

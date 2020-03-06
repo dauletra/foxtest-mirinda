@@ -1,34 +1,24 @@
 <template>
     <div>
-        <div v-if="exam_quizes.length > 0" class="border d-flex" style="height: 60px">
+        <div v-if="seance.quizes.length > 0" class="border d-flex" style="height: 60px">
             <div class="border shadow-sm d-flex align-items-center">
                 <div class="text-center text-secondary font-weight-bold px-2">
-                    {{ exam_quizes.length }}
+                    {{ seance.quizes.length }}
                 </div>
             </div>
             <div class="d-flex align-items-center px-2 border-right w-100 white-space: nowrap" style="overflow-x: auto">
-                <a href="#" class="px-2" v-for="(quiz, index) in exam_quizes" v-bind:key="index" v-on:click.prevent="next_question(quiz.id)">{{ quiz.number }}</a>
+                <a href="#" class="px-2" v-for="(init_quiz, index) in seance.quizes" v-bind:key="index" v-on:click.prevent="next_question(init_quiz.id)">{{ init_quiz.number }}</a>
             </div>
         </div>
 
-        <div v-else class="alert-success text-center font-weight-bold p-2 border rounded">
-            Вопросы закончились<br/>
-            <span v-if="mistakes > 0">
-                Вы допустили <sp>{{mistakes}}</sp> <span v-if="mistakes === 1">ошибку</span> <span v-else>ошибки</span>
-            </span>
-        </div>
-
         <div class="px-2 pt-3" style="overflow-x: auto;">
-            <div class="d-flex justify-content-between mb-2">
-                <span style="white-space: nowrap">
-                    <span :class="[corrects ? 'text-success' : 'text-muted']"><font-awesome-icon :icon="['far', 'thumbs-up']" /> {{ corrects }}</span>
-                    <span :class="['mx-2', mistakes ? 'text-danger' : 'text-muted']"><font-awesome-icon :icon="['far', 'thumbs-down']" /> {{ mistakes }}</span>
-                </span>
+            <div v-if="seance.quizes.length > 0" class="d-flex justify-content-between mb-2">
+                <thumbs v-bind:up="seance.correct_answers" v-bind:down="seance.incorrect_answers" />
                 <span>
                     <label for="show_option_id" v-bind:class="['mr-1', show_option ? '' : 'text-muted']">
                         <span v-if="!show_option">Показать ответы</span>
                         <span v-else>
-                            <span v-if="mode === 1">вариант А)</span>
+                            <span v-if="seance.mode === 1">вариант А)</span>
                             <span v-else>[больше нуля]</span>
                         </span>
                     </label>
@@ -37,15 +27,15 @@
             </div>
 
             <div v-touch:swipe.left="next_question">
-                <p v-html="question_answers.question" onselectstart="return false" onmousedown="return false"></p>
-                <div v-for="answer in question_answers.answers" v-bind:key="answer.value" class="d-flex">
+                <p v-html="sh_quiz.question" onselectstart="return false" onmousedown="return false"></p>
+                <div v-for="answer in sh_quiz.answers" v-bind:key="answer.value" class="d-flex">
                     <span v-if="answer.spoiler.value > 0" v-bind:class="['text-'+answer.spoiler.color, 'font-weight-bold']">
                         <font-awesome-icon icon="check" v-if="answer.spoiler.value === 1" />
                         <font-awesome-icon icon="times" v-if="answer.spoiler.value === 2" />
                     </span>
                     <p class="form-check-inline" v-on:dblclick="check_answer_by_mode">
-                        <input v-model="answer_codes" v-bind:disabled="checked"
-                               class="form-check-input" v-bind:type="mode === 1 ? 'radio' : 'checkbox'" v-bind:value="answer.value"
+                        <input v-model="answer_codes" v-bind:disabled="answer_checked"
+                               class="form-check-input" v-bind:type="seance.mode === 1 ? 'radio' : 'checkbox'" v-bind:value="answer.value"
                                v-bind:id="'answer'+answer.value">
                         <label v-bind:for="'answer'+answer.value" v-html="show_option ? answer.pre_text + answer.text : answer.text"
                                class="form-check-label" onselectstart="return false" onmousedown="return false"></label>
@@ -56,10 +46,10 @@
 
         <div class="d-flex px-2 py-3">
             <div class="w-100 text-center">
-                <button type="button" v-bind:disabled="checked" v-on:click="check_answer" class="btn btn-info rounded-0">Проверить</button>
+                <button type="button" v-bind:disabled="answer_checked" v-on:click="check_answer" class="btn btn-info rounded-0">Проверить</button>
             </div>
             <div>
-                <button type="button" v-bind:disabled="exam_quizes.length === 0" v-on:click="next_question" class="btn btn-warning rounded-0">
+                <button type="button" v-bind:disabled="seance.quizes.length === 0" v-on:click="next_question" class="btn btn-warning rounded-0">
                     <font-awesome-icon icon="angle-right" />
                 </button>
             </div>
@@ -69,8 +59,7 @@
 
 <script>
     import sp from './sp'
-
-    // todo В конце теста предложить пройти снова или перейти на следующие вопросы
+    import thumbs from './thumbs'
 
     function shuffle_array(array) {
         for (let i = array.length - 1; i > 0; i--) {
@@ -83,18 +72,14 @@
     export default {
         name: "Trainer",
         props: {
-            exam_quizes: Array,
-            mode: Number,
-            seance: Number
+            seance: Object
         },
         data() {
             return {
                 answer_codes: [],
-                checked: '',
-                mistakes: 0,
-                corrects: 0,
-                question_answers: {},
-                quiz: {},
+                answer_checked: '',
+                sh_quiz: {},
+                init_quiz: {},
                 show_option: false
             }
         },
@@ -103,30 +88,28 @@
         },
         watch: {
             seance: function(val) {
-                this.mistakes = 0;
-                this.corrects = 0;
                 this.next_question();
             }
         },
         computed: {},
         methods: {
             next_question: function(id) {
-                if (this.exam_quizes.length === 0) {
+                if (this.seance.quizes.length === 0) {
                     console.log('# Вопросы закончились');
                     return;
                 }
 
                 if (typeof id === "number") {
-                    this.quiz = this.exam_quizes.filter(quiz => quiz.id === id)[0];
+                    this.init_quiz = this.seance.quizes.filter(init_quiz => init_quiz.id === id)[0];
                 } else {
-                    let index = Math.floor(Math.random() * this.exam_quizes.length);
-                    this.quiz = this.exam_quizes[index];
+                    let index = Math.floor(Math.random() * this.seance.quizes.length);
+                    this.init_quiz = this.seance.quizes[index];
                 }
 
                 let answers = [];
                 let spoiler = { color: '', value: 0 };
 
-                this.quiz.answers.forEach((answer, index) => {
+                this.init_quiz.answers.forEach((answer, index) => {
                     answers.push({
                         pre_text: answer[0] + ' ',
                         text: answer[1],
@@ -134,7 +117,7 @@
                         spoiler
                     })
                 });
-                this.quiz.fake_answers.forEach((fake_answer, index) => {
+                this.init_quiz.fake_answers.forEach((fake_answer, index) => {
                     answers.push({
                         pre_text: fake_answer[0] + ' ',
                         text: fake_answer[1],
@@ -144,26 +127,26 @@
                 });
 
                 this.answer_codes = [];
-                this.checked = false;
+                this.answer_checked = false;
 
-                this.question_answers = {};
-                this.question_answers.question = this.quiz.question;
-                this.question_answers.answers = shuffle_array(answers);
+                this.sh_quiz = {};
+                this.sh_quiz.question = this.init_quiz.question;
+                this.sh_quiz.answers = shuffle_array(answers);
             },
             check_answer_by_mode() {
-                if (this.mode === 1)
+                if (this.seance.mode === 1)
                     this.check_answer();
             },
             check_answer: function() {
-                if (this.checked) return;
-                this.checked = true;
+                if (this.answer_checked) return;
+                this.answer_checked = true;
 
                 let is_right;
 
                 if (typeof this.answer_codes === "number") {
                     is_right = this.answer_codes === 100;
 
-                    this.question_answers.answers.forEach(answer => {
+                    this.sh_quiz.answers.forEach(answer => {
                         let color = '',
                             value = 0;
 
@@ -177,9 +160,9 @@
                         answer.spoiler = { color, value };
                     })
                 } else {
-                    is_right = this.answer_codes.every(value => value >= 100) && this.answer_codes.length === this.question_answers.answers.filter(ans => ans.value >= 100).length;
+                    is_right = this.answer_codes.every(value => value >= 100) && this.answer_codes.length === this.sh_quiz.answers.filter(ans => ans.value >= 100).length;
 
-                    this.question_answers.answers.forEach(answer => {
+                    this.sh_quiz.answers.forEach(answer => {
                         let color = '',
                             value = 0;
 
@@ -195,16 +178,17 @@
                 }
 
                 if (is_right) {
-                    this.exam_quizes.splice(this.exam_quizes.indexOf(this.quiz), 1);
-                    this.corrects += 1;
+                    this.seance.quizes.splice(this.seance.quizes.indexOf(this.init_quiz), 1);
+                    this.seance.correct_answers += 1;
                 } else {
-                    this.exam_quizes.push(this.quiz);
-                    this.mistakes += 1;
+                    this.seance.quizes.push(this.init_quiz);
+                    this.seance.incorrect_answers += 1;
                 }
             }
         },
         components: {
-            sp
+            // sp,
+            thumbs
         }
     }
 </script>
