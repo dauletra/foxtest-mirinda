@@ -73,26 +73,38 @@
                     <div class="col-12 col-sm-6 border">
                         <div class="border-bottom p-2"><font-awesome-icon :icon="['far', 'check-circle']" style="color: #2b496e;" /> один ответ</div>
                         <div class="p-2">
-                            <div><sp>2.</sp> В каком году Эйнштейн получил Нобельевскую премию? (Во всех воросах вариант А должен быть правильным)
+                            <div><sp>2.</sp> Давление в гидравлической машине 400 кПа. На меньший поршень действует сила 200 Н. Площадь меньшего поршня
                                 <sp>&para;</sp></div>
-                            <div>A<sp>)</sp> 1922 г<sp>&para;</sp></div>
-                            <div>B<sp>)</sp> 1914 г<sp>&para;</sp></div>
-                            <div>C<sp>)</sp> 1921 г<sp>&para;</sp></div>
-                            <div>D<sp>)</sp> 1926 г<sp>&para;</sp></div>
-                            <div>E<sp>)</sp> 1918 г<sp>&para;</sp></div>
+                            <div>A<sp>)</sp> 50 см<sup>2</sup><sp>&para;</sp></div>
+                            <div>B<sp>)</sp> 200 см<sup>2</sup><sp>&para;</sp></div>
+                            <div>C<sp>)</sp> 20 см<sup>2</sup><sp>&para;</sp></div>
+                            <div>D<sp>)</sp> 500 см<sup>2</sup><sp>&para;</sp></div>
+                            <div>E<sp>)</sp> 100 см<sup>2</sup><sp>&para;</sp></div>
+                        </div>
+                        <div class="">
+                            <ul class="list-group">
+                                <li class="list-group-item">Количество вариантов: <sp>5</sp></li>
+                                <li class="list-group-item">Правильный вариант: <sp>всегда A</sp></li>
+                            </ul>
                         </div>
                     </div>
                     <div class="col-12 col-sm-6 border mt-2 mt-sm-0">
                         <div class="border-bottom p-2"><font-awesome-icon :icon="['far', 'check-square']" style="color: #2b496e;" /> несколько ответов</div>
                         <div class="p-2">
-                            <div><sp>2.</sp> В каком году Эйнштейн получил Нобельевскую премию? (В данном вопросе правильные ответы B, C, D)
+                            <div><sp>2.</sp> При напряжении 200 В и силе тока 2 А работа силы тока за 2 минуты в электрической плите равна
                                 <sp>&para;</sp></div>
-                            <div>A<sp>)</sp> <sp>[</sp>0.0<sp>]</sp> 1922 г<sp>&para;</sp></div>
-                            <div>B<sp>)</sp> <sp>[</sp>0.6<sp>]</sp> 1914 г<sp>&para;</sp></div>
-                            <div>C<sp>)</sp> <sp>[</sp>0.7<sp>]</sp> 1921 г<sp>&para;</sp></div>
-                            <div>D<sp>)</sp> <sp>[</sp>0.7<sp>]</sp> 1926 г<sp>&para;</sp></div>
-                            <div>E<sp>)</sp> <sp>[</sp>0.0<sp>]</sp> 1918 г<sp>&para;</sp></div>
-                            <div>F<sp>)</sp> <sp>[</sp>0.0<sp>]</sp> 1918 г<sp>&para;</sp></div>
+                            <div>A<sp>)</sp> <sp>[</sp>0.0<sp>]</sp> 32 кДж<sp>&para;</sp></div>
+                            <div>B<sp>)</sp> <sp>[</sp>1.0<sp>]</sp> 48 кДж<sp>&para;</sp></div>
+                            <div>C<sp>)</sp> <sp>[</sp>0.0<sp>]</sp> 3800 Дж<sp>&para;</sp></div>
+                            <div>D<sp>)</sp> <sp>[</sp>0.0<sp>]</sp> 32000 Дж<sp>&para;</sp></div>
+                            <div>E<sp>)</sp> <sp>[</sp>1.0<sp>]</sp> 48000 Дж<sp>&para;</sp></div>
+                            <div>F<sp>)</sp> <sp>[</sp>0.0<sp>]</sp> 3,8 кДж<sp>&para;</sp></div>
+                        </div>
+                        <div class="">
+                            <ul class="list-group">
+                                <li class="list-group-item">Количество вариантов: <sp>6</sp></li>
+                                <li class="list-group-item">Правильные варианты: <sp>здесь В, Е</sp></li>
+                            </ul>
                         </div>
                     </div>
                 </div>

@@ -30,6 +30,9 @@
                 <span>Бурное 2020</span> |
                 <span>
                     <a href="https://vk.com/dauletra" target="_blank">vk.com/dauletra</a>
+                </span> |
+                <span>
+                    <a href="https://github.com/dauletra/foxtest-mirinda" target="_blank">GitHub</a>
                 </span>
                 <Reader v-on:set_quiz_bank="set_quiz_bank" />
             </div>
